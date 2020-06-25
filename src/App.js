@@ -14,8 +14,7 @@ function App() {
     color: '#008000',
   });
 
-  // const nextGen = matrix.map((arr) => [...arr]);
-
+  // useEffect is creating the canvas board
   useEffect(() => {
     for (let col = 0; col < matrix.length; col++) {
       for (let row = 0; row < matrix[col].length; row++) {
@@ -29,7 +28,7 @@ function App() {
         ctx.stroke();
       }
     }
-
+    //implementing my double buffer here
     if (running.current) {
       window.setTimeout(() => {
         setGeneration(generation + 1);
@@ -37,7 +36,7 @@ function App() {
       }, gameSpeed);
     }
   }, [matrix, gameColor]);
-
+  // randomizes the board
   let randomClick = () => {
     pause();
 
@@ -46,7 +45,7 @@ function App() {
       setGeneration(0);
     }, gameSpeed);
   };
-
+  // clears the board
   let clearClick = () => {
     pause();
 
@@ -55,7 +54,7 @@ function App() {
       setGeneration(0);
     }, gameSpeed);
   };
-
+  // play click creates a new matrix based off the previous matrix and checks the neighbor cells and implements the rules of game of life
   let playClick = () => {
     let newMatrix = matrix.map((row, i) => {
       return [...row];
@@ -76,7 +75,7 @@ function App() {
     });
     setMatrix(newMatrix);
   };
-
+  // allows the user to paint on the canvas
   let canvasPainter = (event) => {
     const x = Math.floor((event.clientX - canvasRef.current.offsetLeft) / 16);
     const y = Math.floor((event.clientY - canvasRef.current.offsetTop) / 16);
@@ -93,33 +92,32 @@ function App() {
     setMatrix(newMatrix);
   };
 
-  neighbors();
-
+  // starts the game
   let play = () => {
     running.current = true;
     requestAnimationFrame(playClick);
     setGeneration(generation + 1);
   };
-
+  // pauses the game
   let pause = () => {
     running.current = false;
   };
-
+  // creates 3 variables for of speed
   const speed = (e) => {
     setGameSpeed(e.target.value);
   };
-
+  // allows user to change background color
   const color = (e) => {
     setGameColor({ background: e.target.value, color: gameColor.color });
   };
-
+  // allows user to change picel color
   const pixelColor = (e) => {
     setGameColor({ background: gameColor.background, color: e.target.value });
   };
 
   return (
     <div className="App">
-      <header className="App-header">Wel to Xavier's Game of Life</header>
+      <header className="App-header">Welcome to Xavier's Game of Life</header>
       <div className="app-container">
         <div className="canvasSection">
           <h1 className="h1">Generation : {generation} </h1>

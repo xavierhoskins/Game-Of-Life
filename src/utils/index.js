@@ -1,7 +1,8 @@
+// creates a matrix
 export function buildGrid() {
   return new Array(25).fill(null).map(() => new Array(25).fill(0));
 }
-
+// creats a matrix with randoms 1s and 0s
 export function randomGrid() {
   return new Array(25)
     .fill(null)
@@ -9,7 +10,7 @@ export function randomGrid() {
       new Array(25).fill(null).map(() => Math.floor(Math.random() * 2))
     );
 }
-
+// checks the surrounding neighbors of the cell that has been clicked
 export function neighbors(matrix, y, x) {
   let count = 0;
   for (let i = y - 1; i <= y + 1; i++) {
