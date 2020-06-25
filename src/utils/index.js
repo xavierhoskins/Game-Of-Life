@@ -1,5 +1,3 @@
-import { render } from '@testing-library/react';
-
 export function buildGrid() {
   return new Array(25).fill(null).map(() => new Array(25).fill(0));
 }

@@ -59,7 +59,17 @@
 
 .ul {
   display: flex;
-  text-align: left;
+  align-items: baseline;
+  flex-direction: column;
+}
+
+.li {
+  font-size: 50px;
+}
+
+.h1 {
+  font-family: 'Teko', sans-serif;
+  font-size: 50px;
 }
 
 .colorCenter {

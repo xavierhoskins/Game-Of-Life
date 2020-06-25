@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './App.css';
 import { randomGrid, buildGrid, neighbors } from './utils';
-import { Button, Input } from 'reactstrap';
+import { Button } from 'reactstrap';
 
 function App() {
   const canvasRef = useRef();
@@ -122,7 +122,7 @@ function App() {
       <header className="App-header">Welcome to Xavier's Game of Life</header>
       <div className="app-container">
         <div className="canvasSection">
-          <h1>Generation : {generation} </h1>
+          <h1 className="h1">Generation : {generation} </h1>
 
           <div className="gameSection">
             <canvas
@@ -173,8 +173,8 @@ function App() {
         </div>
 
         <div className="rulesSection">
-          <h1>Rules :</h1>
-          <ul>
+          <h1 className="h1">Rules :</h1>
+          <ul className="ul">
             <li>
               Any live cell with fewer than two live neighbours dies, as if by
               underpopulation.
