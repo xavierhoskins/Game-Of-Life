@@ -12,6 +12,11 @@
   background-position: center;
 }
 
+.App-header {
+  font-family: 'Teko', sans-serif;
+  font-size: 50px;
+}
+
 .app-container {
   display: flex;
   flex-direction: row;
@@ -49,9 +54,14 @@
   display: flex;
   justify-content: space-evenly;
   padding-top: 20px;
+  align-items: center;
 }
 
 .ul {
   display: flex;
   text-align: left;
+}
+
+.colorCenter {
+  padding-top: 10px;
 }

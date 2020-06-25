@@ -1,14 +1,14 @@
 import { render } from '@testing-library/react';
 
 export function buildGrid() {
-  return new Array(10).fill(null).map(() => new Array(10).fill(0));
+  return new Array(25).fill(null).map(() => new Array(25).fill(0));
 }
 
 export function randomGrid() {
-  return new Array(10)
+  return new Array(25)
     .fill(null)
     .map(() =>
-      new Array(10).fill(null).map(() => Math.floor(Math.random() * 2))
+      new Array(25).fill(null).map(() => Math.floor(Math.random() * 2))
     );
 }
 
@@ -19,7 +19,7 @@ export function neighbors(matrix, y, x) {
       if (i === y && j === x) {
         continue;
       }
-      if (i >= 0 && i < 10 && j >= 0 && j < 10) {
+      if (i >= 0 && i < 25 && j >= 0 && j < 25) {
         count += matrix[i][j];
       }
     }

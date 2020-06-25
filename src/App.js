@@ -1,25 +1,30 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './App.css';
 import { randomGrid, buildGrid, neighbors } from './utils';
+import { Button, Input } from 'reactstrap';
 
 function App() {
   const canvasRef = useRef();
   const running = useRef();
   const [matrix, setMatrix] = useState(buildGrid);
   const [generation, setGeneration] = useState(0);
+  const [gameSpeed, setGameSpeed] = useState(1000);
+  const [gameColor, setGameColor] = useState({
+    background: '#808080',
+    color: '#008000',
+  });
 
   // const nextGen = matrix.map((arr) => [...arr]);
 
   useEffect(() => {
-    console.log('work');
     for (let col = 0; col < matrix.length; col++) {
       for (let row = 0; row < matrix[col].length; row++) {
         const cell = matrix[col][row];
         const ctx = canvasRef.current.getContext('2d');
 
         ctx.beginPath();
-        ctx.rect(col * 40, row * 40, 40, 40);
-        ctx.fillStyle = cell ? 'green' : 'grey';
+        ctx.rect(col * 16, row * 16, 16, 16);
+        ctx.fillStyle = cell ? gameColor.color : gameColor.background;
         ctx.fill();
         ctx.stroke();
       }
@@ -29,9 +34,9 @@ function App() {
       window.setTimeout(() => {
         setGeneration(generation + 1);
         requestAnimationFrame(playClick);
-      }, 500);
+      }, gameSpeed);
     }
-  }, [matrix]);
+  }, [matrix, gameColor]);
 
   let randomClick = () => {
     pause();
@@ -39,7 +44,7 @@ function App() {
     window.setTimeout(() => {
       setMatrix(randomGrid());
       setGeneration(0);
-    }, 500);
+    }, gameSpeed);
   };
 
   let clearClick = () => {
@@ -48,11 +53,10 @@ function App() {
     window.setTimeout(() => {
       setMatrix(buildGrid());
       setGeneration(0);
-    }, 500);
+    }, gameSpeed);
   };
 
   let playClick = () => {
-    console.log('matrix', matrix);
     let newMatrix = matrix.map((row, i) => {
       return [...row];
     });
@@ -60,13 +64,12 @@ function App() {
     matrix.forEach((row, i) => {
       row.forEach((column, j) => {
         let cellsAround = neighbors(matrix, i, j);
-        console.log(cellsAround, i, j);
+
         if (column === 1 && cellsAround < 2) {
           newMatrix[i][j] = 0;
         } else if (column === 1 && cellsAround > 3) {
           newMatrix[i][j] = 0;
         } else if (column === 0 && cellsAround === 3) {
-          console.log('hello');
           newMatrix[i][j] = 1;
         }
       });
@@ -75,9 +78,8 @@ function App() {
   };
 
   let canvasPainter = (event) => {
-    const x = Math.floor((event.clientX - canvasRef.current.offsetLeft) / 40);
-    const y = Math.floor((event.clientY - canvasRef.current.offsetTop) / 40);
-    console.log('clicked', x, y, matrix);
+    const x = Math.floor((event.clientX - canvasRef.current.offsetLeft) / 16);
+    const y = Math.floor((event.clientY - canvasRef.current.offsetTop) / 16);
 
     const newMatrix = matrix.map((row, i) => {
       return row.map((column, j) => {
@@ -101,6 +103,18 @@ function App() {
 
   let pause = () => {
     running.current = false;
+  };
+
+  const speed = (e) => {
+    setGameSpeed(e.target.value);
+  };
+
+  const color = (e) => {
+    setGameColor({ background: e.target.value, color: gameColor.color });
+  };
+
+  const pixelColor = (e) => {
+    setGameColor({ background: gameColor.background, color: e.target.value });
   };
 
   return (
@@ -128,10 +142,33 @@ function App() {
           </div>
 
           <div className="buttonBottom">
-            <button onClick={play}>Play</button>
-            <button onClick={pause}>Pause</button>
-            <button onClick={clearClick}>Clear</button>
-            <button onClick={randomClick}>Random</button>
+            <input
+              type="color"
+              value={gameColor.background}
+              onChange={color}
+              placeholder="background"
+            ></input>
+            <input
+              type="color"
+              value={gameColor.color}
+              onChange={pixelColor}
+            ></input>
+
+            <Button color="success" onClick={play}>
+              Play
+            </Button>
+            <Button color="primary" onClick={pause}>
+              Pause
+            </Button>
+            <Button color="warning" onClick={clearClick}>
+              Clear
+            </Button>
+            <Button onClick={randomClick}>Random</Button>
+            <select className="speeds" value={gameSpeed} onChange={speed}>
+              <option value={1000}>Slow</option>
+              <option value={500}>Normal</option>
+              <option value={100}>Fast</option>
+            </select>
           </div>
         </div>
 
