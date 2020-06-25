@@ -4,6 +4,7 @@ import { randomGrid, buildGrid, neighbors } from './utils';
 
 function App() {
   const canvasRef = useRef();
+  const running = useRef();
   const [matrix, setMatrix] = useState(buildGrid);
   const [generation, setGeneration] = useState(0);
 
@@ -23,19 +24,36 @@ function App() {
         ctx.stroke();
       }
     }
+
+    if (running.current) {
+      window.setTimeout(() => {
+        setGeneration(generation + 1);
+        requestAnimationFrame(playClick);
+      }, 500);
+    }
   }, [matrix]);
 
   let randomClick = () => {
-    setMatrix(randomGrid());
+    pause();
+
+    window.setTimeout(() => {
+      setMatrix(randomGrid());
+      setGeneration(0);
+    }, 500);
   };
 
   let clearClick = () => {
-    setMatrix(buildGrid());
-    setGeneration(0);
+    pause();
+
+    window.setTimeout(() => {
+      setMatrix(buildGrid());
+      setGeneration(0);
+    }, 500);
   };
 
   let playClick = () => {
-    const newMatrix = matrix.map((row, i) => {
+    console.log('matrix', matrix);
+    let newMatrix = matrix.map((row, i) => {
       return [...row];
     });
 
@@ -54,7 +72,6 @@ function App() {
       });
     });
     setMatrix(newMatrix);
-    setGeneration(generation + 1);
   };
 
   let canvasPainter = (event) => {
@@ -76,39 +93,16 @@ function App() {
 
   neighbors();
 
-  // useEffect(() => {
-  //   for (let col = 0; col < matrix.length; col++) {
-  //     for (let row = 0; row < matrix[col].length; row++) {
-  //       const cell = matrix[col][row];
-  //       let numNeighbours = 0;
-  //       for (let i = -1; i < 2; i++) {
-  //         for (let j = -1; j < 2; j++) {
-  //           if (i === 0 && j === 0) {
-  //             continue;
-  //           }
-  //           const x_cell = col + i;
-  //           const y_cell = row + j;
+  let play = () => {
+    running.current = true;
+    requestAnimationFrame(playClick);
+    setGeneration(generation + 1);
+  };
 
-  //           if (x_cell >= 0 && y_cell >= 0 && x_cell < 10 && y_cell < 10) {
-  //             const currentNeighbour = matrix[col + i][row + j];
-  //             numNeighbours += currentNeighbour;
-  //           }
-  //         }
-  //       }
+  let pause = () => {
+    running.current = false;
+  };
 
-  //       // rules
-  //       if (cell === 1 && numNeighbours < 2) {
-  //         nextGen[col][row] = 0;
-  //       } else if (cell === 1 && numNeighbours > 3) {
-  //         nextGen[col][row] = 0;
-  //       } else if (cell === 0 && numNeighbours === 3) {
-  //         nextGen[col][row] = 1;
-  //       }
-  //     }
-
-  //     return nextGen;
-  //   }
-  // });
   return (
     <div className="App">
       <header className="App-header">Welcome to Xavier's Game of Life</header>
@@ -134,8 +128,8 @@ function App() {
           </div>
 
           <div className="buttonBottom">
-            <button onClick={playClick}>Play</button>
-            <button>Pause</button>
+            <button onClick={play}>Play</button>
+            <button onClick={pause}>Pause</button>
             <button onClick={clearClick}>Clear</button>
             <button onClick={randomClick}>Random</button>
           </div>
