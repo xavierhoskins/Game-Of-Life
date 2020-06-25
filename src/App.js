@@ -119,7 +119,7 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">Welcome to Xavier's Game of Life</header>
+      <header className="App-header">Wel to Xavier's Game of Life</header>
       <div className="app-container">
         <div className="canvasSection">
           <h1 className="h1">Generation : {generation} </h1>
